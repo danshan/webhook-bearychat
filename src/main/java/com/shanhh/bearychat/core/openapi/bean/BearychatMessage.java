@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author dan
@@ -16,26 +17,40 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @ToString
-public class BearychatMessage implements Serializable {
+public class BearychatMessage extends BearychatRequest {
 
     private static final long serialVersionUID = -916938355000058040L;
 
     /* @fomartter: on
     {
-      "key": "1485236262366.0193",
-      "updated": "2017-01-24T13:37:42.000+0000",
-      "is_channel": false,
-      "uid": "=bw52O",
+      "attachments": [
+        {
+          "color": "#ffa500",
+          "images": [
+            {
+              "height": 160,
+              "url": "https://images.bearychat.com/ad21145330b6f95a94edc9456961db4e?orig=http%3A%2F%2Fimg7%2Edoubanio%2Ecom%2Ficon%2Ful15067564-30%2Ejpg%3Fheight%3D160%26width%3D160",
+              "width": 160
+            }
+          ],
+          "text": "attachment text",
+          "title": "attachment title",
+          "type": "rtm"
+        }
+      ],
+      "created": "2017-05-01T18:13:25.000+0800",
+      "created_ts": 1493633604746,
       "fallback": null,
-      "attachments": [],
-      "created": "2017-01-24T13:37:42.000+0000",
-      "vchannel_id": "=bw52O",
+      "is_channel": false,
+      "key": "1493633604746.0032",
       "refer_key": null,
       "robot_id": null,
-      "created_ts": 1485236262366,
-      "team_id": "=bw52O",
       "subtype": "normal",
-      "text": "hello"
+      "team_id": "=bwAxP",
+      "text": "中午吃啥",
+      "uid": "=bwOKs",
+      "updated": "2017-05-01T18:13:25.000+0800",
+      "vchannel_id": "=b2y6W624k"
     }
      * @formatter: off
      */
@@ -48,4 +63,25 @@ public class BearychatMessage implements Serializable {
     private String uid;
     @JsonProperty("vchannel_id")
     private String vchannelId;
+    private List<Attachment> attachments;
+
+    @Data
+    @NoArgsConstructor
+    @ToString
+    public static class Attachment implements Serializable {
+        private String color;
+        private String text;
+        private String title;
+        private String type;
+        private List<Image> images;
+
+        @Data
+        @NoArgsConstructor
+        @ToString
+        public static class Image implements Serializable {
+            private int height;
+            private String url;
+            private String width;
+        }
+    }
 }

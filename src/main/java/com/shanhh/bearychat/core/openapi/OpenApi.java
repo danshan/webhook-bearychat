@@ -1,6 +1,8 @@
 package com.shanhh.bearychat.core.openapi;
 
 import com.shanhh.bearychat.core.openapi.bean.BearychatMessage;
+import com.shanhh.bearychat.core.openapi.bean.BearychatP2p;
+import com.shanhh.bearychat.core.openapi.bean.BearychatP2pRequest;
 import com.shanhh.bearychat.core.openapi.bean.BearychatUser;
 
 import java.util.List;
@@ -15,4 +17,5 @@ public interface OpenApi {
 
     BearychatMessage messageCreate(String service, BearychatMessage bearychatMessage) throws Exception;
 
+    BearychatP2p p2pCreate(String service, BearychatP2pRequest p2pRequest) throws Exception;
 }

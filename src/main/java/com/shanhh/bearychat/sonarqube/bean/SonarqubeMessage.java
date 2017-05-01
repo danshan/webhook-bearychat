@@ -58,11 +58,11 @@ public class SonarqubeMessage implements WebhookMessage {
                     "metric": "new_coverage",
                     "onLeakPeriod": true,
                     "operator": "LESS_THAN",
-                    "status": "NO_VALUE"
+                    "status": "NO_VALUE" // ERROR / OK / WARN / NO_VALUE
                 }
             ],
             "name": "SonarQube way",
-            "status": "OK"
+            "status": "OK" // ERROR / OK / WARN
         },
         "status": "SUCCESS",
         "taskId": "AVh21JS2JepAEhwQ-b3u"

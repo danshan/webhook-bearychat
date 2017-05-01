@@ -21,6 +21,7 @@ import java.util.List;
 public class BearychatConfig {
 
     private List<Token> tokens = Lists.newArrayList();
+    private String baseUrl;
 
     @Data
     @NoArgsConstructor
