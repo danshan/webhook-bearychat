@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @ToString
-public class User implements Serializable {
+public class BearychatUser implements Serializable {
 
     private static final long serialVersionUID = -2749489935371435488L;
 

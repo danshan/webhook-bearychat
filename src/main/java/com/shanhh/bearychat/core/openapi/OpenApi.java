@@ -1,7 +1,7 @@
 package com.shanhh.bearychat.core.openapi;
 
 import com.shanhh.bearychat.core.openapi.bean.BearychatMessage;
-import com.shanhh.bearychat.core.openapi.bean.User;
+import com.shanhh.bearychat.core.openapi.bean.BearychatUser;
 
 import java.util.List;
 
@@ -11,8 +11,8 @@ import java.util.List;
  */
 public interface OpenApi {
 
-    List<User> userList() throws Exception;
+    List<BearychatUser> userList(String service) throws Exception;
 
-    BearychatMessage messageCreate(BearychatMessage bearychatMessage) throws Exception;
+    BearychatMessage messageCreate(String service, BearychatMessage bearychatMessage) throws Exception;
 
 }

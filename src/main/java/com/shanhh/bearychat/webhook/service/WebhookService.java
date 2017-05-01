@@ -8,6 +8,8 @@ import com.shanhh.bearychat.webhook.bean.WebhookMessage;
  */
 public interface WebhookService {
 
+    String getService();
+
     void handle(WebhookMessage webhookMessage);
 
 }

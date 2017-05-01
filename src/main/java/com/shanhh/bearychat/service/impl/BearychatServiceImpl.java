@@ -22,9 +22,9 @@ public class BearychatServiceImpl implements BearychatService {
     private OpenApi openApi;
 
     @Override
-    public void sendMessage(BearychatMessage bearychatMessage) {
+    public void sendMessage(String service, BearychatMessage bearychatMessage) {
         try {
-            openApi.userList();
+            openApi.userList(service);
         } catch (Exception e) {
             e.printStackTrace();
         }

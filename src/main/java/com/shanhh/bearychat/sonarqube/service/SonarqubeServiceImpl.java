@@ -24,11 +24,16 @@ public class SonarqubeServiceImpl implements SonarqubeService {
     private BearychatService bearychatService;
 
     @Override
+    public String getService() {
+        return "sonarqube";
+    }
+
+    @Override
     public void handle(WebhookMessage webhookMessage) {
         Preconditions.checkArgument(webhookMessage instanceof SonarqubeMessage);
         SonarqubeMessage sonarqubeMessage = (SonarqubeMessage) webhookMessage;
 
-        bearychatService.sendMessage(convertMessage(sonarqubeMessage));
+        bearychatService.sendMessage(getService(), convertMessage(sonarqubeMessage));
     }
 
     private BearychatMessage convertMessage(SonarqubeMessage sonarqubeMessage) {
