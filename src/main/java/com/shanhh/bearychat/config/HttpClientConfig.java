@@ -99,7 +99,7 @@ public class HttpClientConfig {
                 .setServiceUnavailableRetryStrategy(new ServiceUnavailableRetryStrategy() {
                     @Override
                     public boolean retryRequest(final HttpResponse response, final int executionCount, final HttpContext context) {
-                        return executionCount < 5;
+                        return false;
                     }
 
                     @Override

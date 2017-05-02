@@ -1,4 +1,4 @@
-package com.shanhh.bearychat.service;
+package com.shanhh.bearychat.core.service;
 
 import com.shanhh.bearychat.core.openapi.bean.BearychatMessage;
 

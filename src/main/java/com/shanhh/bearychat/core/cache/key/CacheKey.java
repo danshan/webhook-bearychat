@@ -1,4 +1,4 @@
-package com.shanhh.bearychat.cache.key;
+package com.shanhh.bearychat.core.cache.key;
 
 /**
  * @author dan

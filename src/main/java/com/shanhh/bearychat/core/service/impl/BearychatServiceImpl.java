@@ -1,12 +1,12 @@
-package com.shanhh.bearychat.service.impl;
+package com.shanhh.bearychat.core.service.impl;
 
-import com.shanhh.bearychat.cache.service.UserCache;
+import com.shanhh.bearychat.core.cache.service.UserCache;
 import com.shanhh.bearychat.core.openapi.OpenApi;
 import com.shanhh.bearychat.core.openapi.bean.BearychatMessage;
 import com.shanhh.bearychat.core.openapi.bean.BearychatP2p;
 import com.shanhh.bearychat.core.openapi.bean.BearychatP2pRequest;
 import com.shanhh.bearychat.core.openapi.bean.BearychatUser;
-import com.shanhh.bearychat.service.BearychatService;
+import com.shanhh.bearychat.core.service.BearychatService;
 
 import lombok.extern.slf4j.Slf4j;
 

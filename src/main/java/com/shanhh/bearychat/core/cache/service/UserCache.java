@@ -1,4 +1,4 @@
-package com.shanhh.bearychat.cache.service;
+package com.shanhh.bearychat.core.cache.service;
 
 
 import com.shanhh.bearychat.core.openapi.bean.BearychatUser;

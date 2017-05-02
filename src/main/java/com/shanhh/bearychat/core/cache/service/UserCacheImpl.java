@@ -1,10 +1,10 @@
-package com.shanhh.bearychat.cache.service;
+package com.shanhh.bearychat.core.cache.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
-import com.shanhh.bearychat.cache.key.UNameKey;
-import com.shanhh.bearychat.cache.key.UidKey;
+import com.shanhh.bearychat.core.cache.key.UNameKey;
+import com.shanhh.bearychat.core.cache.key.UidKey;
 import com.shanhh.bearychat.core.openapi.bean.BearychatUser;
 
 import lombok.extern.slf4j.Slf4j;

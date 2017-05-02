@@ -1,6 +1,6 @@
-package com.shanhh.bearychat.sonarqube.bean;
+package com.shanhh.bearychat.integration.sonarqube.bean;
 
-import com.shanhh.bearychat.webhook.bean.WebhookMessage;
+import com.shanhh.bearychat.core.webhook.bean.WebhookPayload;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @ToString
-public class SonarqubeMessage implements WebhookMessage {
+public class SonarqubePayload implements WebhookPayload {
     /*
     @formatter:on
     {

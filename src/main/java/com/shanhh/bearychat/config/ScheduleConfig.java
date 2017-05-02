@@ -1,6 +1,6 @@
 package com.shanhh.bearychat.config;
 
-import com.shanhh.bearychat.service.BearychatService;
+import com.shanhh.bearychat.core.service.BearychatService;
 
 import lombok.extern.slf4j.Slf4j;
 
