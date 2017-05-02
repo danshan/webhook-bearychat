@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author dan
@@ -45,6 +46,7 @@ public class BearychatUser implements Serializable {
      * @formatter: off
      */
     private boolean inactive;
+    private String id;
     private String role;
     private String email;
     private String name;

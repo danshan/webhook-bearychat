@@ -10,4 +10,6 @@ public interface BearychatService {
 
     void sendMessage(String service, BearychatMessage bearychatMessage);
 
+    void refreshUserCache(String service);
+
 }
