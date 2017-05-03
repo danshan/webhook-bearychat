@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Charsets;
 import com.shanhh.bearychat.config.BearychatConfig;
 import com.shanhh.bearychat.core.openapi.bean.BearychatMessage;
 import com.shanhh.bearychat.core.openapi.bean.BearychatP2p;
@@ -81,8 +82,8 @@ public class OpenApiImpl implements OpenApi {
 
     private <T> T post(String service, HttpPost request, BearychatRequest bearychatRequest, TypeReference typeOfT) throws IOException {
         bearychatRequest.setToken(bearychatConfig.getToken(service));
-        request.setEntity(new StringEntity(OBJECT_MAPPER.writeValueAsString(bearychatRequest)));
-        request.addHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+        request.setEntity(new StringEntity(OBJECT_MAPPER.writeValueAsString(bearychatRequest), Charsets.UTF_8));
+        request.addHeader("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE);
         HttpResponse response = httpClient.execute(request);
         return OBJECT_MAPPER.readValue(new InputStreamReader(response.getEntity().getContent()), typeOfT);
     }
@@ -94,7 +95,7 @@ public class OpenApiImpl implements OpenApi {
         } else {
             request.setURI(new URI(uri.toString() + "&token=" + ""));
         }
-        request.addHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+        request.addHeader("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE);
         HttpResponse response = httpClient.execute(request);
         return OBJECT_MAPPER.readValue(new InputStreamReader(response.getEntity().getContent()), typeOfT);
     }

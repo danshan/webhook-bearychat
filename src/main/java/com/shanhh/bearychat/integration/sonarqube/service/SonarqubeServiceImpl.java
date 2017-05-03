@@ -10,10 +10,11 @@ import com.shanhh.bearychat.integration.sonarqube.bean.SonarqubePayload;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -50,24 +51,38 @@ public class SonarqubeServiceImpl implements SonarqubeService {
 
         List<BearychatMessage.Attachment> attachments = Lists.newLinkedList();
         if (sonarqubeMessage.getQualityGate() != null && !CollectionUtils.isEmpty(sonarqubeMessage.getQualityGate().getConditions())) {
+            BearychatMessage.Attachment attachment = new BearychatMessage.Attachment();
+            attachment.setColor(BearychatColor.DANGER.getColor());
+            StringBuffer text = new StringBuffer();
+
             sonarqubeMessage.getQualityGate().getConditions().stream()
-//                    .filter(condition -> !"OK".equals(condition.getStatus()))
+                    .filter(condition -> !"OK".equals(condition.getStatus()))
                     .forEach(condition -> {
-                        BearychatMessage.Attachment attachment = new BearychatMessage.Attachment();
-                        attachment.setColor(buildColor(condition));
-                        attachment.setTitle(buildTitle(condition));
-                        attachment.setText(buildText(condition));
-                        attachments.add(attachment);
+                        text.append(buildText(condition)).append("\n");
                     });
+            attachment.setText(text.toString().trim());
+            attachments.add(attachment);
         }
         while (attachments.size() > 30) {
             attachments.remove(attachments.size() - 1);
         }
 
-        message.setText(String.format("[SonarQube Quality Gate](http://sonar.wanda-group.net) **%s**: `%s`", sonarqubeMessage.getProject().getName(), sonarqubeMessage.getStatus()));
+        message.setText(buildText(sonarqubeMessage));
         message.setAttachments(attachments);
 
         return message;
+    }
+
+    private String buildText(SonarqubePayload sonarqubeMessage) {
+        try {
+            return String.format("质量域 is **%s** on project: [%s](%s)",
+                    sonarqubeMessage.getStatus(),
+                    sonarqubeMessage.getProject().getName(),
+                    "http://sonar.wanda-group.net/dashboard?id=" + URLEncoder.encode(sonarqubeMessage.getProject().getKey(), "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            // ignore excpetion
+            return null;
+        }
     }
 
     private String buildColor(SonarqubePayload.Condition condition) {
@@ -85,12 +100,12 @@ public class SonarqubeServiceImpl implements SonarqubeService {
         }
     }
 
-    private String buildTitle(SonarqubePayload.Condition condition) {
-        return String.format("Expected: %s %s %s", condition.getMetric(), condition.getOperator(), condition.getErrorThreshold());
-    }
-
     private String buildText(SonarqubePayload.Condition condition) {
-        return String.format("Current: %s %s", condition.getStatus(), StringUtils.trimToEmpty(condition.getValue()));
+        return String.format("%s %s %s **[%s]**",
+                condition.getMetric(),
+                condition.getOperator(),
+                condition.getErrorThreshold(),
+                "NO_VALUE".equals(condition.getStatus()) ? "NA" : condition.getValue());
     }
 
     @Override
