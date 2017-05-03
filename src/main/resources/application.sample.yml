@@ -1,0 +1,19 @@
+bearychat:
+  baseUrl: https://api.bearychat.com/v1
+  tokens:
+    - name: sonarqube
+      token:
+    - name: nexus
+      token:
+
+spring:
+# REDIS (RedisProperties)
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    max-active: 8
+    max-wait: -1
+    max-idle: 8
+    min-idle: 2
+    timeout: 100
