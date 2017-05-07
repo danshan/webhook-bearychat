@@ -3,6 +3,7 @@ package com.shanhh.bearychat.core.cache.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
+import com.shanhh.bearychat.config.BearychatConfig;
 import com.shanhh.bearychat.core.cache.key.UNameKey;
 import com.shanhh.bearychat.core.cache.key.UidKey;
 import com.shanhh.bearychat.core.openapi.bean.BearychatUser;
@@ -32,10 +33,13 @@ public class UserCacheImpl implements UserCache {
     private StringRedisTemplate stringRedisTemplate;
     @Resource
     private ObjectMapper objectMapper;
+    @Resource
+    private BearychatConfig bearychatConfig;
 
     @Override
     public BearychatUser loadByUsername(String username) {
         String cacheKey = UNameKey.builder()
+                .teamId(bearychatConfig.getTeamId())
                 .username(username)
                 .build().buildKey();
         String userJson = stringRedisTemplate.opsForValue().get(cacheKey);
@@ -53,6 +57,7 @@ public class UserCacheImpl implements UserCache {
     @Override
     public BearychatUser loadByUserId(String userId) {
         String cacheKey = UidKey.builder()
+                .teamId(bearychatConfig.getTeamId())
                 .userId(userId)
                 .build().buildKey();
         String userJson = stringRedisTemplate.opsForValue().get(cacheKey);
@@ -82,7 +87,7 @@ public class UserCacheImpl implements UserCache {
     public void cacheUsers(List<BearychatUser> users) {
         try {
             int count = 0;
-            int batchSize = 10;
+            int batchSize = 50;
             while (count < users.size()) {
                 RedisCallback<List<Object>> pipeline = buildUserPipeline(users.subList(count, Math.min(count + batchSize, users.size())));
                 stringRedisTemplate.execute(pipeline);
@@ -100,9 +105,9 @@ public class UserCacheImpl implements UserCache {
             conn.openPipeline();
             users.forEach(user -> {
                 try {
-                    conn.set(redisSerializer.serialize(UidKey.builder().userId(user.getId()).build().buildKey()),
+                    conn.set(redisSerializer.serialize(UidKey.builder().teamId(bearychatConfig.getTeamId()).userId(user.getId()).build().buildKey()),
                             redisSerializer.serialize(objectMapper.writeValueAsString(user)));
-                    conn.set(redisSerializer.serialize(UNameKey.builder().username(user.getName()).build().buildKey()),
+                    conn.set(redisSerializer.serialize(UNameKey.builder().teamId(bearychatConfig.getTeamId()).username(user.getName()).build().buildKey()),
                             redisSerializer.serialize(objectMapper.writeValueAsString(user)));
                 } catch (JsonProcessingException e) {
                     log.error("serialize user failed", e);

@@ -1,11 +1,13 @@
 package com.shanhh.bearychat.config;
 
+import com.google.common.base.Preconditions;
 import com.shanhh.bearychat.core.service.BearychatService;
 
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 
@@ -25,10 +27,8 @@ public class ScheduleConfig {
     @Scheduled(fixedRate = 10 * 60 * 1000)
     public void refreshUserCache() {
         log.debug("refresh user cache start");
-        if (bearychatConfig.getTokens().size() > 0) {
-            BearychatConfig.Token token = bearychatConfig.getTokens().get(0);
-            bearychatService.refreshUserCache(token.getName());
-        }
+        Preconditions.checkArgument(!CollectionUtils.isEmpty(bearychatConfig.getTokens()));
+        bearychatService.refreshUserCache(bearychatConfig.getTokens().get(0).getName());
         log.debug("refresh user cache start");
     }
 

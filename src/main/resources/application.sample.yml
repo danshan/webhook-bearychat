@@ -1,5 +1,6 @@
 bearychat:
   baseUrl: https://api.bearychat.com/v1
+  teamId:
   tokens:
     - name: sonarqube
       token:

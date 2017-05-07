@@ -1,14 +1,12 @@
 package com.shanhh.bearychat.config;
 
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.shanhh.bearychat.core.interceptor.PrometheusInterceptor;
 
 import lombok.Getter;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 

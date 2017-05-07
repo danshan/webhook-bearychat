@@ -1,4 +1,4 @@
-package com.shanhh.bearychat.core.openapi;
+package com.shanhh.bearychat.core.openapi.impl;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -6,10 +6,13 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.shanhh.bearychat.config.BearychatConfig;
+import com.shanhh.bearychat.core.openapi.OpenApi;
 import com.shanhh.bearychat.core.openapi.bean.BearychatMessage;
 import com.shanhh.bearychat.core.openapi.bean.BearychatP2p;
 import com.shanhh.bearychat.core.openapi.bean.BearychatP2pRequest;
 import com.shanhh.bearychat.core.openapi.bean.BearychatRequest;
+import com.shanhh.bearychat.core.openapi.bean.BearychatRtm;
+import com.shanhh.bearychat.core.openapi.bean.BearychatTeam;
 import com.shanhh.bearychat.core.openapi.bean.BearychatUser;
 
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +44,8 @@ public class OpenApiImpl implements OpenApi {
 
     @Resource
     private BearychatConfig bearychatConfig;
-
+    @Resource
+    private BearychatConfig.TokenManager tokenManager;
     @Resource
     private HttpClient httpClient;
 
@@ -74,24 +78,41 @@ public class OpenApiImpl implements OpenApi {
         return p2p;
     }
 
+    @Override
+    public BearychatTeam teamInfo(String token) throws Exception {
+        HttpGet request = new HttpGet(buildUri("team.info"));
+
+        BearychatTeam team = get(token, request, new TypeReference<BearychatTeam>() {});
+        return team;
+    }
+
+    @Override
+    public BearychatRtm rtmStart(String service) throws Exception {
+        HttpPost request = new HttpPost(buildUri("rtm.start"));
+        BearychatRequest bearychatRequest = new BearychatRequest();
+
+        BearychatRtm rtm = post(service, request, bearychatRequest, new TypeReference<BearychatRtm>() {});
+        return rtm;
+    }
+
     private String buildUri(String resource) {
         return bearychatConfig.getBaseUrl().endsWith("/")
                 ? (bearychatConfig.getBaseUrl() + resource)
                 : (bearychatConfig.getBaseUrl() + "/" + resource);
     }
 
-    private <T> T post(String service, HttpPost request, BearychatRequest bearychatRequest, TypeReference typeOfT) throws IOException {
-        bearychatRequest.setToken(bearychatConfig.getToken(service));
+    private <T> T post(String token, HttpPost request, BearychatRequest bearychatRequest, TypeReference typeOfT) throws IOException {
+        bearychatRequest.setToken(token);
         request.setEntity(new StringEntity(OBJECT_MAPPER.writeValueAsString(bearychatRequest), Charsets.UTF_8));
         request.addHeader("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE);
         HttpResponse response = httpClient.execute(request);
         return OBJECT_MAPPER.readValue(new InputStreamReader(response.getEntity().getContent()), typeOfT);
     }
 
-    private <T> T get(String service, HttpGet request, TypeReference typeOfT) throws Exception {
+    private <T> T get(String token, HttpGet request, TypeReference typeOfT) throws Exception {
         URI uri = request.getURI();
         if (StringUtils.isBlank(uri.getQuery())) {
-            request.setURI(new URI(uri.toString() + "?token=" + bearychatConfig.getToken(service)));
+            request.setURI(new URI(uri.toString() + "?token=" + token));
         } else {
             request.setURI(new URI(uri.toString() + "&token=" + ""));
         }
