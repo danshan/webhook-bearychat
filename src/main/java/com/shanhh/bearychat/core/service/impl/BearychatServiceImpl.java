@@ -1,5 +1,6 @@
 package com.shanhh.bearychat.core.service.impl;
 
+import com.shanhh.bearychat.config.BearychatConfig;
 import com.shanhh.bearychat.core.cache.service.UserCache;
 import com.shanhh.bearychat.core.openapi.OpenApi;
 import com.shanhh.bearychat.core.openapi.bean.BearychatMessage;
@@ -28,17 +29,20 @@ public class BearychatServiceImpl implements BearychatService {
     private OpenApi openApi;
     @Resource
     private UserCache userCache;
+    @Resource
+    private BearychatConfig bearychatConfig;
+    @Resource
+    private BearychatConfig.TokenManager tokenManager;
 
     @Override
     public void sendMessage(String service, BearychatMessage bearychatMessage) {
         try {
             BearychatP2pRequest p2pRequest = new BearychatP2pRequest();
-            p2pRequest.setUid("=bwOKq");
 
-            BearychatP2p p2p = openApi.p2pCreate(service, p2pRequest);
+            BearychatP2p p2p = openApi.p2pCreate(token(service), p2pRequest);
             bearychatMessage.setVchannelId(p2p.getVchannelId());
 
-            openApi.messageCreate(service, bearychatMessage);
+            openApi.messageCreate(token(service), bearychatMessage);
         } catch (Exception e) {
             log.error("send message failed: {}, {}", service, e.getMessage());
         }
@@ -47,12 +51,24 @@ public class BearychatServiceImpl implements BearychatService {
     @Override
     public void refreshUserCache(String service) {
         try {
-            List<BearychatUser> users = openApi.userList(service);
+            List<BearychatUser> users = openApi.userList(token(service));
             userCache.cacheUsers(users);
         } catch (Exception e) {
             log.error("cache users failed: {}, {}", service, e.getMessage());
         }
+    }
 
+    @Override
+    public void rtmToken(String service) {
+        try {
+            openApi.rtmStart(token(service));
+        } catch (Exception e) {
+            log.error("start rtm failed: {}, {}", service, e.getMessage());
+        }
+    }
+
+    private String token(String service) {
+        return tokenManager.getToken(service);
     }
 
 }

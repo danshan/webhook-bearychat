@@ -12,12 +12,14 @@ import lombok.Builder;
 public class UNameKey extends CacheKey {
 
     private static final String VERSION = "1";
+    private String teamId;
     private String username;
 
     @Override
     public String buildKey() {
-        return String.format("%s:%s:v:%s:uname:%s",
+        return String.format("%s:%s:v:%s:tid:%s:uname:%s",
                 DOMAIN, getClass().getCanonicalName(), VERSION,
+                Preconditions.checkNotNull(teamId),
                 Preconditions.checkNotNull(username)
         );
     }
