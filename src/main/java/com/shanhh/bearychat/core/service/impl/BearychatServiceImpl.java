@@ -38,6 +38,7 @@ public class BearychatServiceImpl implements BearychatService {
     public void sendMessage(String service, BearychatMessage bearychatMessage) {
         try {
             BearychatP2pRequest p2pRequest = new BearychatP2pRequest();
+            p2pRequest.setUid(bearychatMessage.getUid());
 
             BearychatP2p p2p = openApi.p2pCreate(token(service), p2pRequest);
             bearychatMessage.setVchannelId(p2p.getVchannelId());

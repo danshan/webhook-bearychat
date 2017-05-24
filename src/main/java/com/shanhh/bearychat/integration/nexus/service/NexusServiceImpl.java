@@ -57,7 +57,7 @@ public class NexusServiceImpl implements NexusService {
         BearychatMessage.Attachment attachment = new BearychatMessage.Attachment();
         attachment.setColor(buildColor(nexusPayload));
         attachment.setTitle(builtTitle(nexusPayload));
-        attachment.setText(builtText(nexusPayload));
+//        attachment.setText(builtText(nexusPayload));
         attachments.add(attachment);
 
         message.setText(String.format("Component `%s` : **%s**", nexusPayload.getAction(), nexusPayload.getRepositoryName()));
@@ -78,10 +78,11 @@ public class NexusServiceImpl implements NexusService {
     }
 
     private String builtTitle(NexusPayload nexusPayload) {
-        return String.format("%s: %s/%s",
+        return String.format("%s: %s/%s: %s",
                 nexusPayload.getComponent().getFormat(),
                 nexusPayload.getComponent().getGroup(),
-                nexusPayload.getComponent().getName());
+                nexusPayload.getComponent().getName(),
+                nexusPayload.getComponent().getVersion());
     }
 
     private String builtText(NexusPayload nexusPayload) {
